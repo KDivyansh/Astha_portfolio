@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 454) {
+    if (window.innerWidth > 768) {
       navbar.classList.remove("active");
     }
   });
