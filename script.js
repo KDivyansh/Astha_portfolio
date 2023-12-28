@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function toggleProjectDetails(button) {
     var projectItem = button.closest('.project-item');
     var allProjectItems = document.querySelectorAll('.project-item');
+    var mainImages = projectItem.querySelectorAll('.main_image');
 
     allProjectItems.forEach(function (item) {
       if (item !== projectItem && item.classList.contains('expanded')) {
@@ -12,6 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
         otherProjectImages.forEach(function (image) {
           image.style.transform = 'scale(1)';
         });
+        // Hide main image of other project items
+        var otherMainImages = item.querySelectorAll('.main_image');
+        otherMainImages.forEach(function (image) {
+          image.style.display = 'block';
+        });
       }
     });
 
@@ -19,10 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var buttonText = projectItem.classList.contains('expanded') ? 'Read Less' : 'Read More';
     button.innerText = buttonText;
 
-    // Toggle the image scaling for the current item
-    var projectImages = projectItem.querySelectorAll('.project-images img');
-    projectImages.forEach(function (image) {
-      image.style.transform = projectItem.classList.contains('expanded') ? 'scale(1.1)' : 'scale(1)';
+    // Toggle the visibility of main images for the current item
+    mainImages.forEach(function (image) {
+      image.style.display = projectItem.classList.contains('expanded') ? 'none' : 'block';
     });
   }
 
@@ -33,16 +38,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-});
-
-
-   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
-
       document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
+        behavior: 'smooth'
+      });
     });
+  });
+
+  // Responsive Navigation
+  const navbar = document.querySelector(".navbar");
+  const navLinks = document.querySelector(".nav-links");
+  const hamburger = document.querySelector(".hamburger");
+
+  hamburger.addEventListener("click", () => {
+    navbar.classList.toggle("active");
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 454) {
+      navbar.classList.remove("active");
+    }
   });
 });
 
@@ -58,17 +76,17 @@ let isDragging = false, isAutoPlay = true, startX, startScrollLeft, timeoutId;
 // Get the number of cards that can fit in the carousel at once
 let cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
 
-// Insert copies of the last few cards to beginning of carousel for infinite scrolling
+// Insert copies of the last few cards to the beginning of the carousel for infinite scrolling
 carouselChildrens.slice(-cardPerView).reverse().forEach(card => {
     carousel.insertAdjacentHTML("afterbegin", card.outerHTML);
 });
 
-// Insert copies of the first few cards to end of carousel for infinite scrolling
+// Insert copies of the first few cards to the end of the carousel for infinite scrolling
 carouselChildrens.slice(0, cardPerView).forEach(card => {
     carousel.insertAdjacentHTML("beforeend", card.outerHTML);
 });
 
-// Scroll the carousel at appropriate postition to hide first few duplicate cards on Firefox
+// Scroll the carousel at the appropriate position to hide the first few duplicate cards on Firefox
 carousel.classList.add("no-transition");
 carousel.scrollLeft = carousel.offsetWidth;
 carousel.classList.remove("no-transition");
@@ -89,8 +107,7 @@ const dragStart = (e) => {
 }
 
 const dragging = (e) => {
-    if(!isDragging) return; // if isDragging is false return from here
-    // Updates the scroll position of the carousel based on the cursor movement
+    if(!isDragging) return; 
     carousel.scrollLeft = startScrollLeft - (e.pageX - startX);
 }
 
@@ -113,13 +130,13 @@ const infiniteScroll = () => {
         carousel.classList.remove("no-transition");
     }
 
-    // Clear existing timeout & start autoplay if mouse is not hovering over carousel
+    // Clear existing timeout & start autoplay if the mouse is not hovering over the carousel
     clearTimeout(timeoutId);
     if(!gallery.matches(":hover")) autoPlay();
 }
 
 const autoPlay = () => {
-    if(window.innerWidth < 800 || !isAutoPlay) return; // Return if window is smaller than 800 or isAutoPlay is false
+    if(window.innerWidth < 800 || !isAutoPlay) return; // Return if the window is smaller than 800 or isAutoPlay is false
     // Autoplay the carousel after every 2500 ms
     timeoutId = setTimeout(() => carousel.scrollLeft += firstCardWidth, 2500);
 }
