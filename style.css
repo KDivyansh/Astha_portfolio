@@ -326,14 +326,19 @@ p {
   border-radius: 8px;
 }
 .project-item-image-left{
-  animation: rtl 3s ease-out forwards;
+  animation: ltr 3s ease-out forwards;
+  animation-range-end: contain 20vh;
+  animation-timeline: view();
 }
 @keyframes rtl{
   0% {
-    transform: translateX(0);
+    transform: translateX(150px);
+  }
+  25%{
+    transform: translateX(150px);
   }
   50% {
-    transform: translateX(25px);
+    transform: translateX(0);
   }
   100% {
     transform: translateX(0);
@@ -341,14 +346,19 @@ p {
 }
 
 .project-item-image-right{
-  animation: ltr 3s ;
+  animation: rtl 3s ease-out forwards;
+  animation-range-end: contain 20vh;
+  animation-timeline: view();
 }
 @keyframes ltr{
   0% {
-    transform: translateX(0);
+    transform: translateX(-150px);
+  }
+  25%{
+    transform: translateX(-150px);
   }
   50% {
-    transform: translateX(-25px);
+    transform: translateX(0);
   }
   100% {
     transform: translateX(0);
